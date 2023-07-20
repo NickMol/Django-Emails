@@ -10,7 +10,7 @@
         
     </div>
 
-    <form method="post" action="{% url 'my_form_view' %}">
+    <form method="post" action="{% url 'my_form_view2' %}">
     {% csrf_token %}
         <div class="linkholder">
             <div class="form1 ml-3"> {{form.email|as_crispy_field}}  </div>

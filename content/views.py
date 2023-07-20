@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from django.utils.html import strip_tags
+from django.contrib.auth.models import User
 
 class BasicEmailView(FormView, ListView):
     template_name = "content/home.html"
@@ -13,7 +14,6 @@ class BasicEmailView(FormView, ListView):
     context_object_name = 'mydata'
     form_class = EmailForm
     success_url = "/"
-    #dja302ema2839@outlook.com
     def form_valid(self, form):
         my_subject = "Email from our Django app!"
         my_message = "This is a message from our app"
@@ -61,10 +61,17 @@ class TemplateEmailView(FormView, ListView):
     #dja302ema2839@outlook.com
     def form_valid(self, form):
         my_subject = "Email from our Django app!"
-        my_message = "This is a message from our app"
-        
         my_recipient = form.cleaned_data['email']
-        
+
+        user = User.objects.get(email=my_recipient)
+        full_name = user.first_name + " "+user.last_name
+        site_url = "http://localhost:8000/"
+        print(full_name)
+
+        context = {
+            'full_name': full_name,
+            'site_url':site_url,
+            }
         
         html_message = render_to_string("content/email.html", context=context)
         plain_message = strip_tags(html_message)
@@ -74,7 +81,6 @@ class TemplateEmailView(FormView, ListView):
             body=plain_message,
             from_email = None,
             to=[my_recipient],
-            fail_silently=False,
         )
 
         msg.attach_alternative(html_message, "text/html")
@@ -83,7 +89,7 @@ class TemplateEmailView(FormView, ListView):
         obj = Emails(
             email = my_recipient,
             subject = my_subject,
-            message = my_message
+            message = "Message has been send with template"
         )
 
         obj.save()
