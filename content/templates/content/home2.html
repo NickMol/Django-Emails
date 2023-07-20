@@ -1,0 +1,57 @@
+{% extends 'content/base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<div class="pageholder">
+    <div class="titleholder"> 
+        
+        <div class="title"> Sending emails with Django! </div> 
+        
+    </div>
+
+    <form method="post" action="{% url 'my_form_view' %}">
+    {% csrf_token %}
+        <div class="linkholder">
+            <div class="form1 ml-3"> {{form.email|as_crispy_field}}  </div>
+            <button class="ourbutton"type="submit"> Submit</button>
+        </div>
+    </form>
+
+    <div class="linkholder">
+  
+        <table id="ourtable3" class="myTable m-3">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Subject</th>
+                    <th>To</th>
+                    <th>Send at</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for a in mydata %}
+                 <tr>
+                    <td> {{a.id}} </td>
+                    <td> {{a.email}} </td>
+                    <td> {{a.subject}} </td>
+                    <td> {{a.created_at}} </td>
+                 </tr>
+
+                {% endfor%}
+            </tbody>
+
+            
+        </table>
+
+     </div>
+
+</div>
+
+</body>
+
+
+        
+
+{% endblock %}
